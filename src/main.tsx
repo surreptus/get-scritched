@@ -7,7 +7,7 @@ import { HashRouter } from "react-router";
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <HashRouter basename={import.meta.env.BASE_URL}>
+    <HashRouter>
       <Provider>
         <App />
       </Provider>
