@@ -1,4 +1,5 @@
-import { Play } from "./play/Play";
+import { Game } from "./game/Game";
 import { Home } from "./home/Home";
+import { Setup } from "./setup/Setup";
 
-export { Play, Home };
+export { Game, Home, Setup };

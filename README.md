@@ -13,7 +13,7 @@ The general gameplay progresses through a set of rounds up to a max hand size, t
 
 ## Development
 
-This application is built using [Vite](https://vite.dev/), [React](https://react.dev/), and ]Chakra](https://www.chakra-ui.com/). To get it running locally:
+This application is built using [Vite](https://vite.dev/), [React](https://react.dev/), and [Chakra](https://www.chakra-ui.com/). To get it running locally:
 
 ```
 npm install
@@ -31,6 +31,6 @@ npm run preview
 
 The application is built to be hosted on Github Pages. Their is an action when changes are committed to `main` which automatically builds and publishes them.
 
-#### License
+## License
 
 The code here is released under GPLv3. Please see the [license page](/LICENSE) to read about it.
