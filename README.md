@@ -1,4 +1,4 @@
-## Get Scritched
+# 🃏 Get Scritched
 
 Scritch is a card game about betting how many hands you think you can take in a given round. It's best played around a dining room table in the winter time.
 
