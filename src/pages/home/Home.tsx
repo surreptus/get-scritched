@@ -6,8 +6,8 @@ export function Home() {
     <div>
       <h1>Welcome to the home page!</h1>
 
-      <Button as={Link} to="/play" colorScheme="blue">
-        Start Game
+      <Button asChild colorScheme="blue">
+        <Link to="/play">Start Game</Link>
       </Button>
     </div>
   );
