@@ -3,17 +3,11 @@ import { useState } from "react";
 import { Betting } from "./Betting";
 import { Playing } from "./Playing";
 import { Scoring } from "./Scoring";
-import { PlayerTally, Step, Suit } from "./types";
+import { PlayerBet, PlayerTally, PlayerValue, Step, Suit } from "./types";
 import { getNextStep, getNextSuit } from "./helpers";
 
 const numberOfHands = 5;
-const players = [
-  { name: "Alice" },
-  { name: "Bob" },
-  { name: "Charlie" },
-  { name: "David" },
-  { name: "Eve" },
-];
+const players = ["Alice", "Bob", "Carol", "Dave", "Eve", "Frank", "Grace"];
 
 /**
  * on the play page a game is either created or loaded from the database.
@@ -26,7 +20,7 @@ const players = [
 export function Game() {
   const [step, setStep] = useState<Step>(getNextStep());
   const [suit, setSuit] = useState<Suit>(getNextSuit());
-  const [tally, setTally] = useState<PlayerTally>(new Map());
+  const [tricks, setTricks] = useState<PlayerValue[]>([]);
 
   /**
    * progress the game through the screens. if the current step is scoring
@@ -40,9 +34,18 @@ export function Game() {
     setStep(getNextStep(step));
   }
 
-  function handleBet(bets: Bets) {
-    setTally(bets);
+  /**
+   * sets the bets for the players and progresses the game to the next step.
+   *
+   * @param bets
+   */
+  function handleBet(bets: PlayerValue[]) {
+    setTricks(bets);
+    handleNext()
   }
+
+  function handleScore(tally: PlayerValue[]) {
+    console.log(tally);
 
   /**
    * render the current step of the game.
@@ -53,11 +56,11 @@ export function Game() {
   function renderStep(step: Step) {
     switch (step) {
       case "betting":
-        return <Betting players={tally.keys} onBet={setBets} />;
+        return <Betting players={players} onBet={handleBet} />;
       case "playing":
         return <Playing onContinue={handleNext} />;
       case "scoring":
-        return <Scoring bets={bets} onScore={handleScore} />;
+        return <Scoring tricks={tricks} onScore={handleScore} />;
     }
   }
 
