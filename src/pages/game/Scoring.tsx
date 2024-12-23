@@ -1,18 +1,29 @@
+import { Form, Formik } from "formik";
 import { PlayerValue } from "./types";
+
+function getInitialValues(tricks: PlayerValue[]) {
+  return {};
+}
 
 interface ScoringProps {
   tricks: PlayerValue[];
-  handleScore: (scores: PlayerValue[]) => void;
+  onScore: (scores: PlayerValue[]) => void;
 }
 
-export function Scoring({ tricks, handleScore }: ScoringProps) {
+export function Scoring({ tricks, onScore }: ScoringProps) {
+  function handleSubmit() {
+    onScore([]);
+  }
+
   return (
-    <div>
-      {tricks.map(([player, tricks], index) => (
-        <div key={index}>
-          <input type="number" value={tricks} />
-        </div>
-      ))}
-    </div>
+    <Formik initialValues={getInitialValues(tricks)} onSubmit={handleSubmit}>
+      <Form>
+        {tricks.map((trick) => (
+          <div key={trick.player}>
+            <input type="number" value={trick.value} />
+          </div>
+        ))}
+      </Form>
+    </Formik>
   );
 }

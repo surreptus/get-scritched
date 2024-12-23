@@ -3,10 +3,9 @@ import { useState } from "react";
 import { Betting } from "./Betting";
 import { Playing } from "./Playing";
 import { Scoring } from "./Scoring";
-import { PlayerBet, PlayerTally, PlayerValue, Step, Suit } from "./types";
+import { PlayerValue, Step, Suit } from "./types";
 import { getNextStep, getNextSuit } from "./helpers";
 
-const numberOfHands = 5;
 const players = ["Alice", "Bob", "Carol", "Dave", "Eve", "Frank", "Grace"];
 
 /**
@@ -41,11 +40,17 @@ export function Game() {
    */
   function handleBet(bets: PlayerValue[]) {
     setTricks(bets);
-    handleNext()
+    handleNext();
   }
 
+  /**
+   *
+   * @param tally
+   * @returns
+   */
   function handleScore(tally: PlayerValue[]) {
     console.log(tally);
+  }
 
   /**
    * render the current step of the game.
