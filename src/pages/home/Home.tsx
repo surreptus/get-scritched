@@ -7,7 +7,7 @@ export function Home() {
       <h1>Welcome to the home page!</h1>
 
       <Button asChild colorScheme="blue">
-        <Link to="/play">Start Game</Link>
+        <Link to="/setup">Start Game</Link>
       </Button>
     </div>
   );

@@ -1,30 +1,35 @@
-import { Form, Formik } from "formik";
-import { PlayerValue } from "./types";
+import { Field, Form, Formik } from "formik";
+import { Player } from "./types";
 import { Button } from "@chakra-ui/react";
 import { CheckboxCard } from "@/components/ui/checkbox-card";
 
-function getInitialValues(tricks: PlayerValue[]) {
-  console.log(tricks);
-  return {};
+function getInitialValues(players: Player[]) {
+  return {
+    scritches: players.map(() => false),
+  };
 }
 
 interface ScoringProps {
-  tricks: PlayerValue[];
-  onScore: (scores: PlayerValue[]) => void;
+  players: Player[];
+  onScore: (scritches: boolean[]) => void;
 }
 
-export function Scoring({ tricks, onScore }: ScoringProps) {
+export function Scoring({ players, onScore }: ScoringProps) {
   function handleSubmit() {
     onScore([]);
   }
 
   return (
-    <Formik initialValues={getInitialValues(tricks)} onSubmit={handleSubmit}>
+    <Formik initialValues={getInitialValues(players)} onSubmit={handleSubmit}>
       <Form>
-        {tricks.map((trick) => (
-          <div key={trick.player}>
-            <CheckboxCard>{trick.player}</CheckboxCard>
-          </div>
+        {players.map((player, index) => (
+          <Field
+            key={player.name}
+            as={CheckboxCard}
+            name={`scritches[${index.toString()}]`}
+          >
+            {player.name}
+          </Field>
         ))}
 
         <Button type="submit">Submit</Button>

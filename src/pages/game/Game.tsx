@@ -1,23 +1,29 @@
-import { Text, Container, Heading, Stack } from "@chakra-ui/react";
+import { Text, Container, Heading, Stack, Icon } from "@chakra-ui/react";
 import { useState } from "react";
 import { Betting } from "./Betting";
 import { Playing } from "./Playing";
 import { Scoring } from "./Scoring";
-import { PlayerValue, Step, Suit } from "./types";
+import { Player, Step, Suit } from "./types";
 import { getNextStep, getNextSuit } from "./helpers";
-import clubs from "../../assets/club.svg";
-import diamonds from "../../assets/diamond.svg";
-import hearts from "../../assets/heart.svg";
-import spades from "../../assets/spade.svg";
+import {
+  PiClubFill,
+  PiDiamondFill,
+  PiHeartFill,
+  PiNotEqualsFill,
+  PiSpadeFill,
+} from "react-icons/pi";
+import { useSearchParams } from "react-router";
 
-const players = ["Alice", "Bob", "Carol", "Dave", "Eve", "Frank", "Grace"];
-const SUIT_ICON = {
-  clubs,
-  diamonds,
-  hearts,
-  spades,
-  "no-trump": "",
-};
+const BASE_SCORE = 10;
+
+function initializePlayers(players: string[]) {
+  return players.map((player) => ({
+    name: player,
+    motto: "",
+    score: 0,
+    tricks: 0,
+  }));
+}
 
 /**
  * on the play page a game is either created or loaded from the database.
@@ -28,10 +34,25 @@ const SUIT_ICON = {
  *
  */
 export function Game() {
+  const [params] = useSearchParams();
   const [round, setRound] = useState(1);
   const [step, setStep] = useState<Step>(getNextStep());
   const [suit, setSuit] = useState<Suit>(getNextSuit());
-  const [tricks, setTricks] = useState<PlayerValue[]>([]);
+  const [players, setPlayers] = useState<Player[]>(() => {
+    const raw = params.get("players");
+
+    if (!raw) throw new Error("you must have players defined");
+
+    return initializePlayers(raw.split(","));
+  });
+
+  const SUIT_ICON = {
+    clubs: <PiClubFill />,
+    diamonds: <PiDiamondFill />,
+    hearts: <PiHeartFill />,
+    spades: <PiSpadeFill />,
+    "no-trump": <PiNotEqualsFill />,
+  };
 
   /**
    * progress the game through the screens. if the current step is scoring
@@ -50,18 +71,36 @@ export function Game() {
    *
    * @param bets
    */
-  function handleBet(bets: PlayerValue[]) {
-    setTricks(bets);
+  function handleBet(tricks: number[]) {
+    setPlayers(
+      players.map((player, index) => ({
+        ...player,
+        tricks: tricks[index],
+      }))
+    );
+
     handleNext();
   }
 
   /**
+   * for each of the players, we check whether they scritched or not. if they did
+   * then we return their current score, if not we add the BASE_SCORE and the number
+   * of tricks they bet they could take.
    *
    * @param tally
    * @returns
    */
-  function handleScore(tally: PlayerValue[]) {
-    console.log(tally);
+  function handleScore(scritches: boolean[]) {
+    setPlayers(
+      players.map((player, index) => ({
+        ...player,
+        score: scritches[index]
+          ? player.score
+          : player.score + player.tricks + BASE_SCORE,
+        tricks: 0,
+      }))
+    );
+
     setRound(round + 1);
     handleNext();
   }
@@ -75,21 +114,24 @@ export function Game() {
   function renderStep(step: Step) {
     switch (step) {
       case "betting":
-        return <Betting players={players} onBet={handleBet} />;
+        return <Betting total={1} players={players} onBet={handleBet} />;
       case "playing":
         return <Playing onContinue={handleNext} />;
       case "scoring":
-        return <Scoring tricks={tricks} onScore={handleScore} />;
+        return <Scoring players={players} onScore={handleScore} />;
     }
   }
 
   return (
     <Container py="8" maxW="md">
-      <Stack pb="8" direction="row" spaceX="2" justify="space-between">
+      <Stack pb="8" direction="row" gap="4" justify="space-between">
         <Heading>Round: {round}</Heading>
         <Stack direction="row" alignItems="center">
-          <img width="24px" height="auto" src={SUIT_ICON[suit]} alt={suit} />
-          <Text>{suit}</Text>
+          <Text fontSize="sm">{suit}</Text>
+
+          <Icon size="lg" color="red">
+            {SUIT_ICON[suit]}
+          </Icon>
         </Stack>
       </Stack>
 
