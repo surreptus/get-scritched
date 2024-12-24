@@ -1,14 +1,14 @@
 import { Field, Form, Formik } from "formik";
-import { PlayerBet } from "./types";
-import { Button } from "@chakra-ui/react";
+import { Box, Button, Flex, Input, Stack } from "@chakra-ui/react";
+import { PlayerValue } from "./types";
 
 interface BettingProps {
   players: string[];
-  onBet: (bets: PlayerBet[]) => void;
+  onBet: (bets: PlayerValue[]) => void;
 }
 
 interface FormValues {
-  bets: PlayerBet[];
+  bets: PlayerValue[];
 }
 
 const INITIAL_VALUES: FormValues = {
@@ -22,19 +22,24 @@ export function Betting({ players, onBet }: BettingProps) {
 
   function renderFields(players: string[]) {
     return players.map((player) => (
-      <div key={player}>
-        <label htmlFor={`bets.${player}`}>{player}</label>
-        <Field type="number" name={`bets.${player}`} />
-      </div>
+      <Flex key={player}>
+        <Box flex="0 90%">
+          <label htmlFor={`bets.${player}`}>{player}</label>
+        </Box>
+
+        <Field width="6rem" as={Input} type="number" name={`bets.${player}`} />
+      </Flex>
     ));
   }
 
   return (
     <Formik onSubmit={handleSubmit} initialValues={INITIAL_VALUES}>
       <Form>
-        {renderFields(players)}
+        <Stack spaceY="2" direction="column">
+          {renderFields(players)}
 
-        <Button type="submit">Submit</Button>
+          <Button type="submit">Submit</Button>
+        </Stack>
       </Form>
     </Formik>
   );

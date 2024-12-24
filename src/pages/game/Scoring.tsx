@@ -1,7 +1,10 @@
 import { Form, Formik } from "formik";
 import { PlayerValue } from "./types";
+import { Button } from "@chakra-ui/react";
+import { CheckboxCard } from "@/components/ui/checkbox-card";
 
 function getInitialValues(tricks: PlayerValue[]) {
+  console.log(tricks);
   return {};
 }
 
@@ -20,9 +23,11 @@ export function Scoring({ tricks, onScore }: ScoringProps) {
       <Form>
         {tricks.map((trick) => (
           <div key={trick.player}>
-            <input type="number" value={trick.value} />
+            <CheckboxCard>{trick.player}</CheckboxCard>
           </div>
         ))}
+
+        <Button type="submit">Submit</Button>
       </Form>
     </Formik>
   );

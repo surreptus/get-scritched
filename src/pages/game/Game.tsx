@@ -1,12 +1,23 @@
-import { Box, Button, Heading } from "@chakra-ui/react";
+import { Text, Container, Heading, Stack } from "@chakra-ui/react";
 import { useState } from "react";
 import { Betting } from "./Betting";
 import { Playing } from "./Playing";
 import { Scoring } from "./Scoring";
 import { PlayerValue, Step, Suit } from "./types";
 import { getNextStep, getNextSuit } from "./helpers";
+import clubs from "../../assets/club.svg";
+import diamonds from "../../assets/diamond.svg";
+import hearts from "../../assets/heart.svg";
+import spades from "../../assets/spade.svg";
 
 const players = ["Alice", "Bob", "Carol", "Dave", "Eve", "Frank", "Grace"];
+const SUIT_ICON = {
+  clubs,
+  diamonds,
+  hearts,
+  spades,
+  "no-trump": "",
+};
 
 /**
  * on the play page a game is either created or loaded from the database.
@@ -17,6 +28,7 @@ const players = ["Alice", "Bob", "Carol", "Dave", "Eve", "Frank", "Grace"];
  *
  */
 export function Game() {
+  const [round, setRound] = useState(1);
   const [step, setStep] = useState<Step>(getNextStep());
   const [suit, setSuit] = useState<Suit>(getNextSuit());
   const [tricks, setTricks] = useState<PlayerValue[]>([]);
@@ -50,6 +62,8 @@ export function Game() {
    */
   function handleScore(tally: PlayerValue[]) {
     console.log(tally);
+    setRound(round + 1);
+    handleNext();
   }
 
   /**
@@ -70,14 +84,16 @@ export function Game() {
   }
 
   return (
-    <div>
-      <Heading>Play</Heading>
+    <Container py="8" maxW="md">
+      <Stack pb="8" direction="row" spaceX="2" justify="space-between">
+        <Heading>Round: {round}</Heading>
+        <Stack direction="row" alignItems="center">
+          <img width="24px" height="auto" src={SUIT_ICON[suit]} alt={suit} />
+          <Text>{suit}</Text>
+        </Stack>
+      </Stack>
 
       {renderStep(step)}
-
-      <Box>
-        <Button onClick={handleNext}>Next</Button>
-      </Box>
-    </div>
+    </Container>
   );
 }
