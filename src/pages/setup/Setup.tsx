@@ -6,7 +6,6 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import feather from "feather-icons";
 import { EmptyState } from "@/components/ui/empty-state";
 import { FieldArray, Form, Formik } from "formik";
 import { useNavigate } from "react-router";
