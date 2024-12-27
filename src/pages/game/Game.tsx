@@ -67,7 +67,7 @@ export function Game() {
       .required()
       .test(
         "not-equal-total",
-        "There are an equal number of bids as the total number of cards.",
+        t("There are an equal number of bids as the total number of cards."),
         (value) => 
           step === 'bid'
             ? value.reduce((acc, current) => current.bid + acc, 0) !== cards
@@ -75,7 +75,7 @@ export function Game() {
       )
       .test(
         "one-must-scritch",
-        "At least one player must scritch each round",
+        t("At least one player must scritch each round"),
         (value) => 
           step === 'play'
             ? value.reduce((acc: boolean, current) => current.scritched || acc, false)

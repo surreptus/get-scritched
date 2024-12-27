@@ -11,7 +11,7 @@
     "No players added yet!": "Nog geen spelers toegevoegd!",
     "Add the players that will be playing the game.": "Voeg de spelers toe die het spel gaan spelen.",
     "When you're ready, click start!": "Als je klaar bent, klik dan op start!",
-    "Add everyone who is playing the game.": "Add the players that will be playing the game.",
+    "Add everyone who is playing the game.": "Voeg iedereen toe die het spel speelt.",
     "bid": "bied",
     "play": "speel",
     "score": "score",
@@ -21,5 +21,10 @@
     "Continue": "Doorgaan",
     "Descending?": "Aflopend?",
     "Total:": "Totaal:",
-    "Language": "Language"
-  }
+    "Language": "Taal",
+    "expensive": "duur",
+    "cheap": "goedkoop",
+    "There are an equal number of bids as the total number of cards.": "Er zijn evenveel biedingen als het totale aantal kaarten.",
+    "At least one player must scritch each round": "Minstens één speler moet elke ronde scritchen",
+    "Enter a name in the input, and click add or enter.": "Voer een naam in het invoerveld in en klik op toevoegen of enter."
+}
