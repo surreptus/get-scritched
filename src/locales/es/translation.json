@@ -1,0 +1,23 @@
+{
+  "Welcome to React": "Bienvenido a React y react-i18next",
+  "Get Scritched": "¡Ráscame!",
+  "Scritch is a card game where you bet how many hands (tricks) you can take each round. Best enjoyed with lots of coffee.": "Scritch es un juego de cartas en el que apuestas cuántas manos (trucos) puedes ganar en cada ronda. Se disfruta mejor con mucho café.",
+  "Start Game": "Iniciar juego",
+  "Setup": "Configuración",
+  "Players": "Jugadores",
+  "Everyone who's playing the game": "Todos los que están jugando el juego",
+  "Enter player name...": "Ingresa el nombre del jugador...",
+  "Add": "Agregar",
+  "No players added yet!": "¡Aún no se han agregado jugadores!",
+  "Add the players that will be playing the game.": "Agrega los jugadores que estarán jugando el juego.",
+  "When you're ready, click start!": "Cuando estés listo, haz clic en iniciar!",
+  "bid": "apuesta",
+  "play": "jugar",
+  "score": "puntuación",
+  "Card": "Carta",
+  "Confirm Bids": "Confirmar apuestas",
+  "Back": "Atrás",
+  "Continue": "Continuar",
+  "Descending?": "¿Descendente?",
+  "Total:": "Total:"
+}

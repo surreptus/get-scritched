@@ -3,6 +3,7 @@ import { FormValues, Player } from "./types";
 import { PlayerItem } from "@/components/PlayerItem";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Field, useFormikContext } from "formik";
+import { useTranslation } from "react-i18next";
 
 interface PlayingProps {
   players: Player[],
@@ -11,6 +12,7 @@ interface PlayingProps {
 
 export function Playing({ onBack, players }: PlayingProps) {
   const { values, isValid } = useFormikContext<FormValues>()
+  const { t } = useTranslation();
 
   return (
     <div>
@@ -18,15 +20,15 @@ export function Playing({ onBack, players }: PlayingProps) {
         <Table.Header>
           <Table.Row>
             <Table.ColumnHeader>
-              Name
+              {t("Name")}
             </Table.ColumnHeader>
 
             <Table.ColumnHeader>
-              Bids
+              {t("Bids")}
             </Table.ColumnHeader>
 
             <Table.ColumnHeader>
-              Scritched?
+              {t("Scritched?")}
             </Table.ColumnHeader>
           </Table.Row>
         </Table.Header>
@@ -62,15 +64,15 @@ export function Playing({ onBack, players }: PlayingProps) {
 
       <HStack>
         <Button variant='ghost' onClick={onBack}>
-          Back
+          {t("Back")}
         </Button>
 
-        <Button disabled={!isValid} type='submit' colorPalette='green'>Continue</Button>
+        <Button disabled={!isValid} type='submit' colorPalette='green'>{t("Continue")}</Button>
 
         <Field name='descending'>
           {({ field, form }: any) => (
             <Checkbox disabled={values.descending} checked={field.value} onCheckedChange={({ checked }) => form.setFieldValue(`descending`, checked)} variant='subtle'>
-              Descending?
+              {t("Descending?")}
             </Checkbox>
           )}
         </Field>
