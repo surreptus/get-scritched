@@ -1,4 +1,4 @@
-import { ErrorMessage, Field, useFormikContext } from "formik";
+import { Field, useFormikContext } from "formik";
 import { Text, Button, Input, InputAddon, Group, Stack } from "@chakra-ui/react";
 import { FormValues, Player } from "./types";
 import { Alert } from "@/components/ui/alert";
