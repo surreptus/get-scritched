@@ -17,8 +17,6 @@ import { object, array, number, boolean } from 'yup'
 import { Scores } from "./Scores";
 import { useTranslation } from "react-i18next";
 
-const BASE_SCORE = 10;
-
 function getInitialValues(players: Player[], descending: boolean) {
   return {
     plays: players.map(player => ({
@@ -53,7 +51,7 @@ export function Game() {
   const [suit, setSuit] = useState<Suit>(getNextSuit());
   const [descending, setDescending] = useState<boolean>(false)
   const [rounds, setRounds] = useState<Round[]>([])
-  const [players, setPlayers] = useState<Player[]>(() => {
+  const [players] = useState<Player[]>(() => {
     const raw = params.get("players");
 
     if (!raw) {
@@ -61,6 +59,8 @@ export function Game() {
     } else {
       return initializePlayers(raw.split(","));
     }
+
+    return []
   });
 
   const SUIT_ICON = {

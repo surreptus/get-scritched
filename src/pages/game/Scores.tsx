@@ -1,9 +1,6 @@
 import { Text, Table } from "@chakra-ui/react"
 import { Round } from "./types"
-import { GiRoundShield } from "react-icons/gi"
 import { useTranslation } from "react-i18next";
-
-const BASE_SCORE = 10
 
 interface ScoresProps {
     rounds: Round[]
