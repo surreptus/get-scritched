@@ -40,7 +40,7 @@ export function Scores({ rounds }: ScoresProps) {
 
       <Table.Body>
         {rounds.map((round, index) => (
-          <Table.Row>
+          <Table.Row key={index}>
             <Table.Cell>
               {round.cards} | {t(round.suit)}
             </Table.Cell>

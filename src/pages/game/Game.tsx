@@ -63,13 +63,6 @@ export function Game() {
     return []
   });
 
-  const SUIT_ICON = {
-    clubs: <PiClubFill />,
-    diamonds: <PiDiamondFill />,
-    hearts: <PiHeartFill />,
-    spades: <PiSpadeFill />,
-    "no-trump": <PiNotEqualsFill />,
-  };
 
   const validationSchema = object({
     plays: array()
