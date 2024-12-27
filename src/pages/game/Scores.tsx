@@ -1,6 +1,7 @@
 import { Text, Table } from "@chakra-ui/react"
 import { Round } from "./types"
 import { GiRoundShield } from "react-icons/gi"
+import { useTranslation } from "react-i18next";
 
 const BASE_SCORE = 10
 
@@ -9,6 +10,7 @@ interface ScoresProps {
 }
 
 export function Scores({ rounds }: ScoresProps) {
+  const { t } = useTranslation();
   var scores:Record<string, number> = rounds.reduce((acc, curr) => {
     return curr.plays.reduce((totals:Record<string, number>, play) => {
       if (play.scritched) {
@@ -28,7 +30,7 @@ export function Scores({ rounds }: ScoresProps) {
       <Table.Header>
         <Table.Row>
           <Table.Cell>
-            Round
+            {t("Round")}
           </Table.Cell>
 
           {rounds[0].plays.map(play =>
@@ -43,7 +45,7 @@ export function Scores({ rounds }: ScoresProps) {
         {rounds.map((round, index) => (
           <Table.Row>
             <Table.Cell>
-              {round.cards} | {round.suit}
+              {round.cards} | {t(round.suit)}
             </Table.Cell>
 
             {round.plays.map(play => (
@@ -62,7 +64,7 @@ export function Scores({ rounds }: ScoresProps) {
       <Table.Footer>
         <Table.Row>
           <Table.Cell>
-            Total:
+            {t("Total:")}
           </Table.Cell>
           {rounds[0].plays.map(play => (
             <Table.Cell>

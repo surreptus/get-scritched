@@ -1,0 +1,23 @@
+{
+  "Welcome to React": "Welcome to React and react-i18next",
+  "Get Scritched": "Get Scritched",
+  "Scritch is a card game where you bet how many hands (tricks) you can take each round. Best enjoyed with lots of coffee.": "Scritch is a card game where you bet how many hands (tricks) you can take each round. Best enjoyed with lots of coffee.",
+  "Start Game": "Start Game",
+  "Setup": "Setup",
+  "Players": "Players",
+  "Everyone who's playing the game": "Everyone who's playing the game",
+  "Enter player name...": "Enter player name...",
+  "Add": "Add",
+  "No players added yet!": "No players added yet!",
+  "Add the players that will be playing the game.": "Add the players that will be playing the game.",
+  "When you're ready, click start!": "When you're ready, click start!",
+  "bid": "bid",
+  "play": "play",
+  "score": "score",
+  "Card": "Card",
+  "Confirm Bids": "Confirm Bids",
+  "Back": "Back",
+  "Continue": "Continue",
+  "Descending?": "Descending?",
+  "Total:": "Total:"
+}

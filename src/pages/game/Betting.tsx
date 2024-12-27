@@ -3,6 +3,7 @@ import { Button, Input, InputAddon, Group, Stack } from "@chakra-ui/react";
 import { FormValues, Player } from "./types";
 import { Alert } from "@/components/ui/alert";
 import { PlayerItem } from "@/components/PlayerItem";
+import { useTranslation } from "react-i18next";
 
 interface BettingProps {
   players: Player[];
@@ -12,9 +13,10 @@ interface BettingProps {
 
 export function Betting({ players, onNext, maxBid }: BettingProps) {
   const { isValid, values } = useFormikContext<FormValues>()
+  const { t } = useTranslation();
   let totalBid = values.plays.reduce((acc, curr) => (acc += curr.bid), 0)
 
-  const description = totalBid > maxBid ? "expensive" : "cheap"
+  const description = totalBid > maxBid ? t("expensive") : t("cheap")
   function renderFields(players: Player[]) {
 
     return players.map((player, index) => {
@@ -39,7 +41,7 @@ export function Betting({ players, onNext, maxBid }: BettingProps) {
 
   return (
     <Stack spaceY="2" direction="column">
-      {totalBid} bid for so far, we are {Math.abs(maxBid - totalBid)} {description} 
+      {totalBid} {t("bid for so far, we are")} {Math.abs(maxBid - totalBid)} {description} 
 
       {renderFields(players)}
 
@@ -50,7 +52,7 @@ export function Betting({ players, onNext, maxBid }: BettingProps) {
             return null
           }
           return (
-            <Alert status="error" title="Someone needs to get scritched!">
+            <Alert status="error" title={t("Someone needs to get scritched!")}>
               {message}
             </Alert>
           )
@@ -58,7 +60,7 @@ export function Betting({ players, onNext, maxBid }: BettingProps) {
       </ErrorMessage>
 
       <Button disabled={!isValid} alignSelf='flex-start' colorPalette="green" onClick={onNext}>
-        Confirm Bids
+        {t("Confirm Bids")}
       </Button>
     </Stack>
   );

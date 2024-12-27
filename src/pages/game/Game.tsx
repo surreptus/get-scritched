@@ -15,6 +15,7 @@ import { useSearchParams } from "react-router";
 import { Form, Formik, FormikHelpers } from "formik";
 import { object, array, number, boolean } from 'yup'
 import { Scores } from "./Scores";
+import { useTranslation } from "react-i18next";
 
 const BASE_SCORE = 10;
 
@@ -45,6 +46,7 @@ function initializePlayers(players: string[]) {
  *
  */
 export function Game() {
+  const { t } = useTranslation();
   const [params] = useSearchParams();
   const [cards, setCards] = useState(1);
   const [step, setStep] = useState<Step>(getNextStep());
@@ -146,13 +148,13 @@ export function Game() {
   return (
     <Container py="8" maxW="md">
       <Stack pb="8" direction="row" gap="4" justify="space-between">
-        <Heading>{step}</Heading>
+        <Heading>{t(step)}</Heading>
 
         <Stack direction="row" alignItems="center">
 
-          <Text fontSize="sm">{cards} Card</Text>
+          <Text fontSize="sm">{cards} {t('Card')}</Text>
           <Separator orientation="vertical" height="4" />
-          <Text fontSize="sm">{suit}</Text>
+          <Text fontSize="sm">{t(suit)}</Text>
 
           <Icon size="lg">
             {SUIT_ICON[suit]}

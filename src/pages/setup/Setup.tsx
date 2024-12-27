@@ -18,6 +18,7 @@ import { ChangeEvent, KeyboardEvent, useState } from "react";
 import { Avatar } from "@/components/ui/avatar";
 import { PiXCircle } from "react-icons/pi";
 import { object, string, array } from 'yup'
+import { useTranslation } from "react-i18next";
 
 const validationSchema = object({
   players: array()
@@ -26,6 +27,7 @@ const validationSchema = object({
 })
 
 export function Setup() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [draft, setDraft] = useState("");
 
@@ -59,7 +61,7 @@ export function Setup() {
             setDraft(event.target.value);
           }}
           value={draft}
-          placeholder="Enter player name..."
+          placeholder={t("Enter player name...")}
           type="text"
         />
 
@@ -70,7 +72,7 @@ export function Setup() {
             setDraft("");
           }}
         >
-          Add
+          {t("Add")}
         </Button>
       </Stack>
     );
@@ -109,7 +111,7 @@ export function Setup() {
   return (
     <Container py="8" maxW="md">
       <Stack spaceY="4">
-        <Heading>Setup</Heading>
+        <Heading>{t("Setup")}</Heading>
 
         <Formik
           onSubmit={handleSubmit}
@@ -121,7 +123,7 @@ export function Setup() {
           {({ values }) => (
             <Form>
               <Stack direction="column" spaceY="2">
-                <LabelField label='Players' helperText="Everyone who's playing the game">
+                <LabelField label={t('Players')} helperText={t("Everyone who's playing the game")}>
                   <FieldArray name="players">
                     {(helpers) => (
                       <Stack width='100%' spaceY="2" direction="column">
@@ -132,8 +134,8 @@ export function Setup() {
                             borderWidth="1px"
                             borderRadius={8}
                             icon={<FiUsers />}
-                            title="No players added yet!"
-                            description="Add the players that will be playing the game."
+                            title={t("No players added yet!")}
+                            description={t("Add the players that will be playing the game.")}
                           />
                         )}
 
@@ -144,11 +146,11 @@ export function Setup() {
                 </LabelField>
 
                 <Button colorPalette="green" type="submit">
-                  Start Game
+                  {t("Start Game")}
                 </Button>
 
                 <Text textAlign="center" textStyle="sm">
-                  When you're ready, click start!
+                  {t("When you're ready, click start!")}
                 </Text>
               </Stack>
             </Form>
