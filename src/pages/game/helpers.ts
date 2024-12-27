@@ -1,4 +1,4 @@
-import { Suit, Step } from "./types";
+import { Suit, Step, Round } from "./types";
 
 /**
  * returns the next step in the game based on the current step
@@ -35,4 +35,22 @@ export function getNextSuit(suit?: Suit): Suit {
     default:
       return "clubs";
   }
+}
+
+export function tallyScores(rounds: Round[]): Record<string, number> {
+  return rounds.reduce((acc, curr) => {
+    return curr.plays.reduce((totals:Record<string, number>, play) => {
+      if (play.scritched) {
+        return totals
+      }
+
+      if (totals[play.name]) {
+        totals[play.name] += play.bid + 10
+      } else {
+        totals[play.name] = play.bid + 10
+      }
+
+      return totals
+    }, acc)
+  }, {})
 }

@@ -124,9 +124,14 @@ export function Game() {
   function renderStep(step: Step) {
     switch (step) {
       case "bid":
-        return <Betting onNext={() => setStep('play')} players={players} maxBid={cards} />;
+        return <Betting
+          rounds={rounds}
+          onNext={() => setStep('play')}
+          players={players}
+          maxBid={cards}
+        />;
       case "play":
-        return <Playing onBack={() => setStep('bid')} players={players} />;
+        return <Playing rounds={rounds} onBack={() => setStep('bid')} players={players} />;
         case "score":
         return <Scores rounds={rounds} />
     }

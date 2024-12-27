@@ -1,20 +1,23 @@
 import { Field, useFormikContext } from "formik";
 import { Text, Button, Input, InputAddon, Group, Stack } from "@chakra-ui/react";
-import { FormValues, Player } from "./types";
+import { FormValues, Player, Round } from "./types";
 import { Alert } from "@/components/ui/alert";
 import { PlayerItem } from "@/components/PlayerItem";
 import { useTranslation } from "react-i18next";
+import { tallyScores } from "./helpers";
 
 interface BettingProps {
   players: Player[];
+  rounds: Round[];
   onNext: () => void;
   maxBid: number;
 }
 
-export function Betting({ players, onNext, maxBid }: BettingProps) {
+export function Betting({ players, onNext, rounds, maxBid }: BettingProps) {
   const { isValid, values, errors, dirty } = useFormikContext<FormValues>()
   const { t } = useTranslation();
   let totalBid = values.plays.reduce((acc, curr) => (acc += curr.bid), 0)
+  const tally = tallyScores(rounds)
 
   const description = totalBid > maxBid ? t("expensive") : t("cheap")
   const error = typeof errors.plays === 'string'
@@ -24,10 +27,12 @@ export function Betting({ players, onNext, maxBid }: BettingProps) {
   function renderFields(players: Player[]) {
     return players.map((player, index) => {
       const fieldName = `plays[${index.toString()}].bid`;
+      const points = tally[player.name]
+        ? t('{{ count }} points', { count: tally[player.name] })
+        : t('No Points')
 
       return (
-        <PlayerItem key={player.name} name={player.name}>
-
+        <PlayerItem key={player.name} caption={points} name={player.name}>
           <Field name={fieldName}>
             {({ field, form }: any) => (
               <Group>

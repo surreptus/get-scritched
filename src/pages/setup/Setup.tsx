@@ -13,16 +13,20 @@ import { FieldArray, FieldArrayRenderProps, Form, Formik } from "formik";
 import { Field as LabelField } from '@/components/ui/field'
 import { useNavigate } from "react-router";
 import { FiUsers } from "react-icons/fi";
-import { FormValues } from "./types";
+import { FormValues, Player } from "./types";
 import { ChangeEvent, KeyboardEvent, useState } from "react";
-import { Avatar } from "@/components/ui/avatar";
 import { PiXCircle } from "react-icons/pi";
 import { object, string, array } from 'yup'
 import { useTranslation } from "react-i18next";
+import { PlayerItem } from "@/components/PlayerItem";
+import { MOTTOS } from "./constants";
 
 const validationSchema = object({
   players: array()
-    .of(string().required())
+    .of(object({
+      name: string(),
+      motto: string()
+    }).required())
     .min(1)
 })
 
@@ -34,7 +38,12 @@ export function Setup() {
   async function handleSubmit(values: FormValues) {
     const params = new URLSearchParams();
 
-    params.set("players", values.players.join(","));
+    params.set(
+      "players",
+      values.players
+        .reduce((acc: string[], player) => acc.concat(player.name), [])
+        .join(',')
+    );
 
     await navigate("/game?" + params.toString());
   }
@@ -52,7 +61,10 @@ export function Setup() {
             if (event.key === "Enter") {
               event.preventDefault();
               if (draft !== "") {
-                helpers.push(draft);
+                helpers.push({
+                  name: draft,
+                  motto: MOTTOS[Math.floor(Math.random() * MOTTOS.length)]
+                });
                 setDraft("");
               }
             }
@@ -84,27 +96,16 @@ export function Setup() {
    * @param helpers render array helpers to remove a player
    * @returns
    */
-  function renderPlayers(players: string[], helpers: FieldArrayRenderProps) {
+  function renderPlayers(players: Player[], helpers: FieldArrayRenderProps) {
     return players.map((player, index) => (
-      <HStack key={player} gap="4">
-        <Avatar colorPalette="purple" name={player} size="md" />
-
-        <Stack
-          flex="1"
-          alignItems="center"
-          justify="space-between"
-          direction="row"
-          gap="2"
-        >
-          <Text flex="1 auto" fontWeight="medium">
-            {player}
-          </Text>
-
-          <IconButton variant="ghost" onClick={() => helpers.remove(index)}>
-            <PiXCircle />
-          </IconButton>
-        </Stack>
-      </HStack>
+      <PlayerItem
+        key={player.name}
+        caption={player.motto}
+        name={player.name}>
+        <IconButton variant="ghost" onClick={() => helpers.remove(index)}>
+          <PiXCircle />
+        </IconButton>
+      </PlayerItem>
     ));
   }
 

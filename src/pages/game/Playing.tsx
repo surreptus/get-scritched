@@ -1,19 +1,22 @@
 import { Button, HStack, Table, Text } from "@chakra-ui/react";
-import { FormValues, Player } from "./types";
+import { FormValues, Player, Round } from "./types";
 import { PlayerItem } from "@/components/PlayerItem";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Field, useFormikContext } from "formik";
 import { useTranslation } from "react-i18next";
 import { useEffect } from "react";
+import { tallyScores } from "./helpers";
 
 interface PlayingProps {
   players: Player[],
-  onBack: () => void
+  onBack: () => void,
+  rounds: Round[]
 }
 
-export function Playing({ onBack, players }: PlayingProps) {
+export function Playing({ onBack, players, rounds }: PlayingProps) {
   const { values, isValid, validateForm } = useFormikContext<FormValues>()
   const { t } = useTranslation();
+  const tally = tallyScores(rounds)
 
   useEffect(() => {
     validateForm()
@@ -39,10 +42,15 @@ export function Playing({ onBack, players }: PlayingProps) {
         </Table.Header>
 
         <Table.Body>
-          {players.map((player, index) => (
+          {players.map((player, index) => {
+            const points = tally[player.name]
+              ? t('{{ count }} points', { count: tally[player.name] })
+              : t('No Points')
+
+            return (
             <Table.Row key={player.name}>
               <Table.Cell>
-                <PlayerItem name={player.name} />
+                <PlayerItem name={player.name} caption={points} />
               </Table.Cell>
 
               <Table.Cell>
@@ -63,7 +71,7 @@ export function Playing({ onBack, players }: PlayingProps) {
                 </Field>
               </Table.Cell>
             </Table.Row>
-          ))}
+          )})}
         </Table.Body>
       </Table.Root>
 
