@@ -132,6 +132,8 @@ export function Game() {
     }
   }
 
+  const IconComponent = SUIT_ICON[suit]
+
   return (
     <Container py="8" maxW="md">
       <Stack pb="8" direction="row" gap="4" justify="space-between">
@@ -144,7 +146,7 @@ export function Game() {
           <Text fontSize="sm">{t(suit)}</Text>
 
           <Icon size="lg">
-            {SUIT_ICON[suit]}
+            <IconComponent />
           </Icon>
         </Stack>
       </Stack>
