@@ -4,18 +4,12 @@ import { Betting } from "./Betting";
 import { Playing } from "./Playing";
 import { FormValues, Player, Round, Step, Suit } from "./types";
 import { getNextStep, getNextSuit } from "./helpers";
-import {
-  PiClubFill,
-  PiDiamondFill,
-  PiHeartFill,
-  PiNotEqualsFill,
-  PiSpadeFill,
-} from "react-icons/pi";
 import { useSearchParams } from "react-router";
 import { Form, Formik, FormikHelpers } from "formik";
 import { object, array, number, boolean } from 'yup'
 import { Scores } from "./Scores";
 import { useTranslation } from "react-i18next";
+import { SUIT_ICON } from "./constants";
 
 function getInitialValues(players: Player[], descending: boolean) {
   return {
