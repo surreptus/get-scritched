@@ -1,6 +1,7 @@
-import { Text, Table } from "@chakra-ui/react"
+import { Text, Table, HStack, Icon, Separator } from "@chakra-ui/react"
 import { Round } from "./types"
 import { useTranslation } from "react-i18next";
+import { SUIT_ICON } from "./constants";
 
 interface ScoresProps {
     rounds: Round[]
@@ -39,23 +40,36 @@ export function Scores({ rounds }: ScoresProps) {
       </Table.Header>
 
       <Table.Body>
-        {rounds.map((round, index) => (
-          <Table.Row key={index}>
-            <Table.Cell>
-              {round.cards} | {t(round.suit)}
-            </Table.Cell>
-
-            {round.plays.map(play => (
+        {rounds.map((round, index) => {
+          const IconComponent = SUIT_ICON[round.suit]
+          return (
+            <Table.Row key={index}>
               <Table.Cell>
-                { play.scritched ? (
-                  <Text textDecoration='line-through'>{play.bid}</Text>
-                ) : (
-                  <Text>{play.bid + 10}</Text>
-                )}
+                <HStack>
+                  <Text fontSize='xs'>
+                    {round.cards}
+                  </Text>
+
+                  <Separator orientation="vertical" height="4" />
+
+                  <Icon size="lg">
+                    <IconComponent />
+                  </Icon>
+                </HStack>
               </Table.Cell>
-            ))}
-          </Table.Row>
-        ))}
+
+              {round.plays.map(play => (
+                <Table.Cell>
+                  {play.scritched ? (
+                    <Text textDecoration='line-through'>{play.bid + 10}</Text>
+                  ) : (
+                    <Text>{play.bid + 10}</Text>
+                  )}
+                </Table.Cell>
+              ))}
+            </Table.Row>
+          )
+        })}
       </Table.Body>
 
       <Table.Footer>
@@ -68,9 +82,8 @@ export function Scores({ rounds }: ScoresProps) {
               {scores[play.name]}
             </Table.Cell>
           ))}
-
         </Table.Row>
-        </Table.Footer>
+      </Table.Footer>
     </Table.Root>
   )
 }

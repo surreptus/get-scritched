@@ -111,7 +111,12 @@ export function Setup() {
   return (
     <Container py="8" maxW="md">
       <Stack spaceY="4">
+        <div>
         <Heading>{t("Setup")}</Heading>
+        <Text fontSize='sm'>
+          {t('Add everyone who is playing the game.')}
+        </Text>
+        </div>
 
         <Formik
           onSubmit={handleSubmit}
@@ -135,7 +140,7 @@ export function Setup() {
                             borderRadius={8}
                             icon={<FiUsers />}
                             title={t("No players added yet!")}
-                            description={t("Add the players that will be playing the game.")}
+                            description={t("Enter a name in the input, and click add or enter.")}
                           />
                         )}
 
@@ -145,13 +150,15 @@ export function Setup() {
                   </FieldArray>
                 </LabelField>
 
-                <Button colorPalette="green" type="submit">
-                  {t("Start Game")}
-                </Button>
+                <HStack>
+                  <Button alignSelf='flex-start' colorPalette="green" type="submit">
+                    {t("Start Game")}
+                  </Button>
 
-                <Text textAlign="center" textStyle="sm">
-                  {t("When you're ready, click start!")}
-                </Text>
+                  <Text fontSize="sm">
+                    {t("When you're ready, click start!")}
+                  </Text>
+                </HStack>
               </Stack>
             </Form>
           )}

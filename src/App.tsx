@@ -8,7 +8,10 @@ function App() {
   const { t, i18n } = useTranslation()
 
   function handleChange(lang: string) {
-    return () => i18n.changeLanguage(lang)
+    return () => {
+      localStorage.setItem('locale', lang)
+      i18n.changeLanguage(lang)
+    }
   }
 
   return (

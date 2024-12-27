@@ -4,15 +4,23 @@ import en from './locales/en/translation.json'
 import es from './locales/en/translation.json'
 import nl from './locales/nl/translation.json'
 
+const lng = localStorage.getItem('locale') || 'en'
+
 i18n
   .use(initReactI18next)
   .init({
     resources: {
-      en, 
-      es,
-      nl
+      en: {
+translation: en
+      }, 
+      es: {
+        translation: es
+      },
+      nl: {
+        translation: nl
+      }
     },
-    lng: "en",
+    lng,
     interpolation: {
       escapeValue: false
     },

@@ -1,5 +1,5 @@
 import { ErrorMessage, Field, useFormikContext } from "formik";
-import { Button, Input, InputAddon, Group, Stack } from "@chakra-ui/react";
+import { Text, Button, Input, InputAddon, Group, Stack } from "@chakra-ui/react";
 import { FormValues, Player } from "./types";
 import { Alert } from "@/components/ui/alert";
 import { PlayerItem } from "@/components/PlayerItem";
@@ -12,13 +12,16 @@ interface BettingProps {
 }
 
 export function Betting({ players, onNext, maxBid }: BettingProps) {
-  const { isValid, values } = useFormikContext<FormValues>()
+  const { isValid, values, errors, dirty } = useFormikContext<FormValues>()
   const { t } = useTranslation();
   let totalBid = values.plays.reduce((acc, curr) => (acc += curr.bid), 0)
 
   const description = totalBid > maxBid ? t("expensive") : t("cheap")
-  function renderFields(players: Player[]) {
+  const error = typeof errors.plays === 'string'
+    ? errors.plays as string
+    : null
 
+  function renderFields(players: Player[]) {
     return players.map((player, index) => {
       const fieldName = `plays[${index.toString()}].bid`;
 
@@ -41,23 +44,17 @@ export function Betting({ players, onNext, maxBid }: BettingProps) {
 
   return (
     <Stack spaceY="2" direction="column">
-      {totalBid} {t("bid for so far, we are")} {Math.abs(maxBid - totalBid)} {description} 
+      <Text fontSize='sm'>
+        {totalBid} {t("bid for so far, we are")} {Math.abs(maxBid - totalBid)} {description} 
+      </Text>
 
       {renderFields(players)}
 
-      <ErrorMessage name="players">
-        {(message) => {
-          console.log(message)
-          if (typeof message != 'string') {
-            return null
-          }
-          return (
-            <Alert status="error" title={t("Someone needs to get scritched!")}>
-              {message}
-            </Alert>
-          )
-        }}
-      </ErrorMessage>
+      {error && dirty && (
+        <Alert status="error" title={t("Someone needs to get scritched!")}>
+          {error}
+        </Alert>
+      )}
 
       <Button disabled={!isValid} alignSelf='flex-start' colorPalette="green" onClick={onNext}>
         {t("Confirm Bids")}

@@ -11,6 +11,7 @@
     "No players added yet!": "Nog geen spelers toegevoegd!",
     "Add the players that will be playing the game.": "Voeg de spelers toe die het spel gaan spelen.",
     "When you're ready, click start!": "Als je klaar bent, klik dan op start!",
+    "Add everyone who is playing the game.": "Add the players that will be playing the game.",
     "bid": "bied",
     "play": "speel",
     "score": "score",
@@ -19,5 +20,6 @@
     "Back": "Terug",
     "Continue": "Doorgaan",
     "Descending?": "Aflopend?",
-    "Total:": "Totaal:"
+    "Total:": "Totaal:",
+    "Language": "Language"
   }

@@ -4,6 +4,7 @@ import { PlayerItem } from "@/components/PlayerItem";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Field, useFormikContext } from "formik";
 import { useTranslation } from "react-i18next";
+import { useEffect } from "react";
 
 interface PlayingProps {
   players: Player[],
@@ -11,8 +12,12 @@ interface PlayingProps {
 }
 
 export function Playing({ onBack, players }: PlayingProps) {
-  const { values, isValid } = useFormikContext<FormValues>()
+  const { values, isValid, validateForm } = useFormikContext<FormValues>()
   const { t } = useTranslation();
+
+  useEffect(() => {
+    validateForm()
+  }, [])
 
   return (
     <div>
