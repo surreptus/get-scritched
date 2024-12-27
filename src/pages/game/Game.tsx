@@ -1,9 +1,8 @@
-import { Text, Container, Heading, Stack, Icon } from "@chakra-ui/react";
+import { Text, Container, Heading, Stack, Icon, Separator } from "@chakra-ui/react";
 import { useState } from "react";
 import { Betting } from "./Betting";
 import { Playing } from "./Playing";
-import { Scoring } from "./Scoring";
-import { Player, Step, Suit } from "./types";
+import { FormValues, Player, Round, Step, Suit } from "./types";
 import { getNextStep, getNextSuit } from "./helpers";
 import {
   PiClubFill,
@@ -13,15 +12,27 @@ import {
   PiSpadeFill,
 } from "react-icons/pi";
 import { useSearchParams } from "react-router";
+import { Form, Formik, FormikHelpers } from "formik";
+import { object, array, number, boolean } from 'yup'
+import { Scores } from "./Scores";
 
 const BASE_SCORE = 10;
+
+function getInitialValues(players: Player[], descending: boolean) {
+  return {
+    plays: players.map(player => ({
+      name: player.name,
+      bid: 0,
+      scritched: false
+    })),
+    descending: descending,
+  }
+}
 
 function initializePlayers(players: string[]) {
   return players.map((player) => ({
     name: player,
     motto: "",
-    score: 0,
-    tricks: 0,
   }));
 }
 
@@ -35,15 +46,19 @@ function initializePlayers(players: string[]) {
  */
 export function Game() {
   const [params] = useSearchParams();
-  const [round, setRound] = useState(1);
+  const [cards, setCards] = useState(1);
   const [step, setStep] = useState<Step>(getNextStep());
   const [suit, setSuit] = useState<Suit>(getNextSuit());
+  const [descending, setDescending] = useState<boolean>(false)
+  const [rounds, setRounds] = useState<Round[]>([])
   const [players, setPlayers] = useState<Player[]>(() => {
     const raw = params.get("players");
 
-    if (!raw) throw new Error("you must have players defined");
-
-    return initializePlayers(raw.split(","));
+    if (!raw) {
+      window.location.assign('/')
+    } else {
+      return initializePlayers(raw.split(","));
+    }
   });
 
   const SUIT_ICON = {
@@ -54,33 +69,30 @@ export function Game() {
     "no-trump": <PiNotEqualsFill />,
   };
 
-  /**
-   * progress the game through the screens. if the current step is scoring
-   * then we also need to progress the suit.
-   */
-  function handleNext() {
-    if (step === "scoring") {
-      setSuit(getNextSuit(suit));
-    }
-
-    setStep(getNextStep(step));
-  }
-
-  /**
-   * sets the bets for the players and progresses the game to the next step.
-   *
-   * @param bets
-   */
-  function handleBet(tricks: number[]) {
-    setPlayers(
-      players.map((player, index) => ({
-        ...player,
-        tricks: tricks[index],
+  const validationSchema = object({
+    plays: array()
+      .of(object({
+        bid: number().max(cards).required(),
+        scritched: boolean()
       }))
-    );
-
-    handleNext();
-  }
+      .required()
+      .test(
+        "not-equal-total",
+        "There are an equal number of bids as the total number of cards.",
+        (value) => 
+          step === 'bid'
+            ? value.reduce((acc, current) => current.bid + acc, 0) !== cards
+            : true
+      )
+      .test(
+        "one-must-scritch",
+        "At least one player must scritch each round",
+        (value) => 
+          step === 'play'
+            ? value.reduce((acc: boolean, current) => current.scritched || acc, false)
+            : true 
+      ),
+  })
 
   /**
    * for each of the players, we check whether they scritched or not. if they did
@@ -90,19 +102,28 @@ export function Game() {
    * @param tally
    * @returns
    */
-  function handleScore(scritches: boolean[]) {
-    setPlayers(
-      players.map((player, index) => ({
-        ...player,
-        score: scritches[index]
-          ? player.score
-          : player.score + player.tricks + BASE_SCORE,
-        tricks: 0,
-      }))
-    );
+  function handleSubmit(values: FormValues, helpers: FormikHelpers<FormValues>) {
+    setRounds(rounds.concat({
+      cards,
+      suit,
+      plays: values.plays
+  }))
 
-    setRound(round + 1);
-    handleNext();
+    if (values.descending) {
+      setDescending(true)
+      setCards(cards - 1)
+    } else {
+      setCards(cards + 1);
+    }
+
+    if (values.descending && cards === 1) {
+      return setStep('score')
+    }
+
+    setSuit(getNextSuit(suit))
+
+    helpers.resetForm()
+    setStep('bid');
   }
 
   /**
@@ -113,29 +134,42 @@ export function Game() {
    */
   function renderStep(step: Step) {
     switch (step) {
-      case "betting":
-        return <Betting total={1} players={players} onBet={handleBet} />;
-      case "playing":
-        return <Playing onContinue={handleNext} />;
-      case "scoring":
-        return <Scoring players={players} onScore={handleScore} />;
+      case "bid":
+        return <Betting onNext={() => setStep('play')} players={players} maxBid={cards} />;
+      case "play":
+        return <Playing onBack={() => setStep('bid')} players={players} />;
+        case "score":
+        return <Scores rounds={rounds} />
     }
   }
 
   return (
     <Container py="8" maxW="md">
       <Stack pb="8" direction="row" gap="4" justify="space-between">
-        <Heading>Round: {round}</Heading>
+        <Heading>{step}</Heading>
+
         <Stack direction="row" alignItems="center">
+
+          <Text fontSize="sm">{cards} Card</Text>
+          <Separator orientation="vertical" height="4" />
           <Text fontSize="sm">{suit}</Text>
 
-          <Icon size="lg" color="red">
+          <Icon size="lg">
             {SUIT_ICON[suit]}
           </Icon>
         </Stack>
       </Stack>
 
-      {renderStep(step)}
+      <Formik
+        enableReinitialize
+        validationSchema={validationSchema}
+        initialValues={getInitialValues(players, descending)}
+        onSubmit={handleSubmit}
+      >
+        <Form>
+          {renderStep(step)}
+        </Form>
+      </Formik>
     </Container>
   );
 }

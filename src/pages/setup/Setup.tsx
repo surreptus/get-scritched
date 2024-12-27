@@ -9,13 +9,21 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { EmptyState } from "@/components/ui/empty-state";
-import { Field, FieldArray, FieldArrayRenderProps, Form, Formik } from "formik";
+import { FieldArray, FieldArrayRenderProps, Form, Formik } from "formik";
+import { Field as LabelField } from '@/components/ui/field'
 import { useNavigate } from "react-router";
 import { FiUsers } from "react-icons/fi";
 import { FormValues } from "./types";
 import { ChangeEvent, KeyboardEvent, useState } from "react";
 import { Avatar } from "@/components/ui/avatar";
 import { PiXCircle } from "react-icons/pi";
+import { object, string, array } from 'yup'
+
+const validationSchema = object({
+  players: array()
+    .of(string().required())
+    .min(1)
+})
 
 export function Setup() {
   const navigate = useNavigate();
@@ -25,7 +33,6 @@ export function Setup() {
     const params = new URLSearchParams();
 
     params.set("players", values.players.join(","));
-    params.set("maxCards", values.maxCards.toString());
 
     await navigate("/game?" + params.toString());
   }
@@ -106,40 +113,35 @@ export function Setup() {
 
         <Formik
           onSubmit={handleSubmit}
+          validationSchema={validationSchema}
           initialValues={{
             players: [],
-            maxCards: 1,
           }}
         >
           {({ values }) => (
             <Form>
               <Stack direction="column" spaceY="2">
-                <FieldArray name="players">
-                  {(helpers) => (
-                    <Stack spaceY="2" direction="column">
-                      {renderAddPlayer(helpers)}
+                <LabelField label='Players' helperText="Everyone who's playing the game">
+                  <FieldArray name="players">
+                    {(helpers) => (
+                      <Stack width='100%' spaceY="2" direction="column">
+                        {renderAddPlayer(helpers)}
 
-                      {values.players.length === 0 && (
-                        <EmptyState
-                          borderWidth="1px"
-                          borderRadius={8}
-                          icon={<FiUsers />}
-                          title="No players added yet!"
-                          description="Add the players that will be playing the game."
-                        />
-                      )}
+                        {values.players.length === 0 && (
+                          <EmptyState
+                            borderWidth="1px"
+                            borderRadius={8}
+                            icon={<FiUsers />}
+                            title="No players added yet!"
+                            description="Add the players that will be playing the game."
+                          />
+                        )}
 
-                      {renderPlayers(values.players, helpers)}
-                    </Stack>
-                  )}
-                </FieldArray>
-
-                <Field
-                  as={Input}
-                  type="number"
-                  placeholder="0"
-                  name="maxCards"
-                />
+                        {renderPlayers(values.players, helpers)}
+                      </Stack>
+                    )}
+                  </FieldArray>
+                </LabelField>
 
                 <Button colorPalette="green" type="submit">
                   Start Game

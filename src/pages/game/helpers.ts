@@ -7,14 +7,11 @@ import { Suit, Step } from "./types";
  */
 export function getNextStep(step?: Step): Step {
   switch (step) {
-    case "betting":
-      return "playing";
-    case "playing":
-      return "scoring";
-    case "scoring":
-      return "betting";
+    case "bid":
+      return "play";
+    case "play":
     default:
-      return "betting";
+      return "bid";
   }
 }
 
