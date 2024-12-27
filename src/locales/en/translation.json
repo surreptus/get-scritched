@@ -19,5 +19,10 @@
   "Back": "Back",
   "Continue": "Continue",
   "Descending?": "Descending?",
-  "Total:": "Total:"
+  "Total:": "Total:",
+  "expensive": "expensive",
+  "cheap": "cheap",
+  "There are an equal number of bids as the total number of cards.": "There are an equal number of bids as the total number of cards.",
+  "At least one player must scritch each round": "At least one player must scritch each round",
+  "Enter a name in the input, and click add or enter.": "Enter a name in the input, and click add or enter."
 }

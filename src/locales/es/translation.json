@@ -19,5 +19,10 @@
   "Back": "Atrás",
   "Continue": "Continuar",
   "Descending?": "¿Descendente?",
-  "Total:": "Total:"
+  "Total:": "Total:",
+  "expensive": "caro",
+  "cheap": "barato",
+  "There are an equal number of bids as the total number of cards.": "Hay un número igual de apuestas que el número total de cartas.",
+  "At least one player must scritch each round": "Al menos un jugador debe rascarse cada ronda",
+  "Enter a name in the input, and click add or enter.": "Ingresa un nombre en el campo y haz clic en agregar o presiona enter."
 }
