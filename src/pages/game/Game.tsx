@@ -9,7 +9,7 @@ import { Form, Formik, FormikHelpers } from "formik";
 import { object, array, number, boolean } from 'yup'
 import { Scores } from "./Scores";
 import { useTranslation } from "react-i18next";
-import { SUIT_ICON } from "./constants";
+import { NUM_CARDS, SUIT_ICON } from "./constants";
 
 function getInitialValues(players: Player[], descending: boolean) {
   return {
@@ -57,7 +57,13 @@ export function Game() {
     return []
   });
 
+  // derived values
+  const maxCards = Math.floor(NUM_CARDS / players.length)
+  const IconComponent = SUIT_ICON[suit]
 
+  /**
+   * validation schema
+   */
   const validationSchema = object({
     plays: array()
       .of(object({
@@ -96,13 +102,16 @@ export function Game() {
       cards,
       suit,
       plays: values.plays
-  }))
+    }))
+
+    let modifier = values.descending ? -1 : 1
 
     if (values.descending) {
       setDescending(true)
-      setCards(cards - 1)
-    } else {
-      setCards(cards + 1);
+    }
+
+    if (cards !== maxCards) {
+      setCards(cards + modifier)
     }
 
     if (values.descending && cards === 1) {
@@ -110,9 +119,8 @@ export function Game() {
     }
 
     setSuit(getNextSuit(suit))
-
-    helpers.resetForm()
     setStep('bid');
+    helpers.resetForm()
   }
 
   /**
@@ -137,17 +145,16 @@ export function Game() {
     }
   }
 
-  const IconComponent = SUIT_ICON[suit]
-
   return (
     <Container py="8" maxW="md">
       <Stack pb="8" direction="row" gap="4" justify="space-between">
         <Heading>{t(step)}</Heading>
 
         <Stack direction="row" alignItems="center">
+          <Text fontSize="sm">{t('{{ count }} / {{ max }} Card', { count: cards, max: maxCards})}</Text>
 
-          <Text fontSize="sm">{cards} {t('Card')}</Text>
           <Separator orientation="vertical" height="4" />
+
           <Text fontSize="sm">{t(suit)}</Text>
 
           <Icon size="lg">

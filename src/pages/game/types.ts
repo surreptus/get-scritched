@@ -1,4 +1,12 @@
 export type Step = "bid" | "play" | "score";
+
+/**
+ * t('clubs', 'Clubs')
+ * t('diamonds', 'Diamonds')
+ * t('hearts', 'Hearts')
+ * t('spades', 'Spades')
+ * t('no-trump', 'No Trump')
+ */
 export type Suit = "clubs" | "diamonds" | "hearts" | "spades" | "no-trump";
 export interface Player {
   name: string;

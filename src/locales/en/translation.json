@@ -14,7 +14,8 @@
   "bid": "bid",
   "play": "play",
   "score": "score",
-  "Card": "Card",
+  "Card": "{{count}} Card",
+  "Card_plural": "{{count}} Cards",
   "Confirm Bids": "Confirm Bids",
   "Back": "Back",
   "Continue": "Continue",
@@ -24,5 +25,9 @@
   "cheap": "cheap",
   "There are an equal number of bids as the total number of cards.": "There are an equal number of bids as the total number of cards.",
   "At least one player must scritch each round": "At least one player must scritch each round",
-  "Enter a name in the input, and click add or enter.": "Enter a name in the input, and click add or enter."
+  "Enter a name in the input, and click add or enter.": "Enter a name in the input, and click add or enter.",
+  "clubs": "Clubs",
+  "diamonds": "Diamonds",
+  "hearts": "Hearts",
+  "spades": "Spades"
 }

@@ -7,3 +7,5 @@ export const SUIT_ICON = {
   spades: PiSpadeFill,
   "no-trump": PiNotEqualsFill,
 };
+
+export const NUM_CARDS = 52
