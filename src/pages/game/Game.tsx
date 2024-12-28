@@ -11,6 +11,14 @@ import { Scores } from "./Scores";
 import { useTranslation } from "react-i18next";
 import { NUM_CARDS, SUIT_ICON } from "./constants";
 
+function getRoundPlayers(round: number, players: Player[]) {
+  const offset = round % players.length 
+  const next = [...players]
+
+  const trimmed = next.splice(0, offset)
+  return next.concat(trimmed)
+}
+
 function getInitialValues(players: Player[], descending: boolean) {
   return {
     plays: players.map(player => ({
@@ -40,7 +48,7 @@ function initializePlayers(players: string[]) {
 export function Game() {
   const { t } = useTranslation();
   const [params] = useSearchParams();
-  const [cards, setCards] = useState(1);
+  const [numCards, setCards] = useState(1);
   const [step, setStep] = useState<Step>(getNextStep());
   const [suit, setSuit] = useState<Suit>(getNextSuit());
   const [descending, setDescending] = useState<boolean>(false)
@@ -60,6 +68,7 @@ export function Game() {
   // derived values
   const maxCards = Math.floor(NUM_CARDS / players.length)
   const IconComponent = SUIT_ICON[suit]
+  const roundPlayers = getRoundPlayers(rounds.length, players)
 
   /**
    * validation schema
@@ -67,7 +76,7 @@ export function Game() {
   const validationSchema = object({
     plays: array()
       .of(object({
-        bid: number().max(cards).required(),
+        bid: number().max(numCards).required(),
         scritched: boolean()
       }))
       .required()
@@ -76,7 +85,7 @@ export function Game() {
         t("There are an equal number of bids as the total number of cards."),
         (value) => 
           step === 'bid'
-            ? value.reduce((acc, current) => current.bid + acc, 0) !== cards
+            ? value.reduce((acc, current) => current.bid + acc, 0) !== numCards
             : true
       )
       .test(
@@ -99,7 +108,7 @@ export function Game() {
    */
   function handleSubmit(values: FormValues, helpers: FormikHelpers<FormValues>) {
     setRounds(rounds.concat({
-      cards,
+      cards: numCards,
       suit,
       plays: values.plays
     }))
@@ -110,11 +119,11 @@ export function Game() {
       setDescending(true)
     }
 
-    if (cards !== maxCards) {
-      setCards(cards + modifier)
+    if (numCards !== maxCards) {
+      setCards(numCards + modifier)
     }
 
-    if (values.descending && cards === 1) {
+    if (values.descending && numCards === 1) {
       return setStep('score')
     }
 
@@ -135,11 +144,11 @@ export function Game() {
         return <Betting
           rounds={rounds}
           onNext={() => setStep('play')}
-          players={players}
-          maxBid={cards}
+          players={roundPlayers}
+          maxBid={numCards}
         />;
       case "play":
-        return <Playing rounds={rounds} onBack={() => setStep('bid')} players={players} />;
+        return <Playing rounds={rounds} onBack={() => setStep('bid')} players={roundPlayers} />;
         case "score":
         return <Scores rounds={rounds} />
     }
@@ -150,17 +159,19 @@ export function Game() {
       <Stack pb="8" direction="row" gap="4" justify="space-between">
         <Heading>{t(step)}</Heading>
 
-        <Stack direction="row" alignItems="center">
-          <Text fontSize="sm">{t('{{ count }} / {{ max }} Card', { count: cards, max: maxCards})}</Text>
+        {numCards !== 0 && (
+          <Stack direction="row" alignItems="center">
+            <Text fontSize="sm">{t('{{ count }} / {{ max }} Card', { count: numCards, max: maxCards })}</Text>
 
-          <Separator orientation="vertical" height="4" />
+            <Separator orientation="vertical" height="4" />
 
-          <Text fontSize="sm">{t(suit)}</Text>
+            <Text fontSize="sm">{t(suit)}</Text>
 
-          <Icon size="lg">
-            <IconComponent />
-          </Icon>
-        </Stack>
+            <Icon size="lg">
+              <IconComponent />
+            </Icon>
+          </Stack>
+        )}
       </Stack>
 
       <Formik

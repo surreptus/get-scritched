@@ -80,7 +80,11 @@ export function Setup() {
         <Button
           size="sm"
           onClick={() => {
-            helpers.push(draft);
+            console.log("draft", draft)
+            helpers.push({
+              name: draft,
+              motto: MOTTOS[Math.floor(Math.random() * MOTTOS.length)]
+            });
             setDraft("");
           }}
         >
