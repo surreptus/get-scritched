@@ -9,15 +9,47 @@ interface PlayerItem {
 }
 
 const COLORS = ['red', 'green', 'teal', 'purple', 'orange', 'yellow', 'blue']
+const letters = 'abcdefghijklmnopqrstuvwxyz'
 
-function getColor(name: string) {
-  return COLORS[name.charCodeAt(0) % COLORS.length]
+function getCss(name: string) {
+  var str = name;
+  var start = 0;
+  let third = Math.floor(str.length / 3);
+  let rgb: number[] = [];
+  for (var i = 0; i < 3; i++) {
+    let end = start + third
+    if (i == 2) {
+      end = str.length
+    }
+    let part = str.slice(start, end)
+    let val = part.split('').reduce((acc, letter) => {
+      console.log(letter, letters.indexOf(letter.toLowerCase()))
+      return acc + letters.indexOf(letter.toLowerCase())
+    }, 0)
+
+    if (val % 2 == 0) {
+      val = val * 10
+    }
+    if (val % 5 == 0) {
+      console.log("xxx")
+      val = val * 3
+    }
+
+    rgb = [...rgb, val]
+    start += third
+  }
+
+  console.log(rgb)
+  return {
+    backgroundColor: `rgba(${rgb.join(',')})`,
+    color: "rgba(0,0,0,0.8)"
+  }
 }
 
 export function PlayerItem({ name, caption, children }: PlayerItem) {
   return (
     <HStack key={name} gap="4">
-      <Avatar colorPalette={getColor(name)} name={name} size="md" />
+      <Avatar css={getCss(name)} name={name} size="md" />
 
       <Stack
         flex="1"
