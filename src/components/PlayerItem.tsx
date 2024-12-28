@@ -8,7 +8,6 @@ interface PlayerItem {
   caption: string;
 }
 
-const COLORS = ['red', 'green', 'teal', 'purple', 'orange', 'yellow', 'blue']
 const letters = 'abcdefghijklmnopqrstuvwxyz'
 
 function getCss(name: string) {
@@ -23,7 +22,6 @@ function getCss(name: string) {
     }
     let part = str.slice(start, end)
     let val = part.split('').reduce((acc, letter) => {
-      console.log(letter, letters.indexOf(letter.toLowerCase()))
       return acc + letters.indexOf(letter.toLowerCase())
     }, 0)
 
@@ -31,7 +29,6 @@ function getCss(name: string) {
       val = val * 10
     }
     if (val % 5 == 0) {
-      console.log("xxx")
       val = val * 3
     }
 
@@ -39,7 +36,6 @@ function getCss(name: string) {
     start += third
   }
 
-  console.log(rgb)
   return {
     backgroundColor: `rgba(${rgb.join(',')})`,
     color: "rgba(0,0,0,0.8)"
