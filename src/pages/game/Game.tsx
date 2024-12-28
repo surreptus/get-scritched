@@ -113,15 +113,13 @@ export function Game() {
       plays: values.plays
     }))
 
-    let modifier = values.descending ? -1 : 1
-
     if (values.descending) {
       setDescending(true)
     }
 
-    if (numCards !== maxCards) {
-      setCards(numCards + modifier)
-    }
+    const modifier = values.descending ? -1 : 1
+
+    setCards(Math.min(maxCards, numCards + modifier))
 
     if (values.descending && numCards === 1) {
       return setStep('score')
@@ -177,7 +175,7 @@ export function Game() {
       <Formik
         enableReinitialize
         validationSchema={validationSchema}
-        initialValues={getInitialValues(players, descending)}
+        initialValues={getInitialValues(roundPlayers, descending)}
         onSubmit={handleSubmit}
       >
         <Form>
